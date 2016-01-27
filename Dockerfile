@@ -8,8 +8,9 @@ ENV JENKINS_HOME /var/jenkins_home
 ENV PEBBLE_SDK_VERSION pebble-sdk-4.0.1-linux64
 
 # get pebble tool
+RUN mkdir -p ${JENKINS_HOME}/pebble-dev
 RUN curl -sSL https://s3.amazonaws.com/assets.getpebble.com/pebble-tool/${PEBBLE_SDK_VERSION}.tar.bz2 \
-        | tar -v -C /${JENKINS_HOME}/pebble-dev/ -xj
+        | tar -v -C ${JENKINS_HOME}/pebble-dev/ -xj
         
 # prepare python environment for Pebble
 WORKDIR /${JENKINS_HOME}/pebble-dev/${PEBBLE_SDK_VERSION}
