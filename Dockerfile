@@ -72,7 +72,7 @@ RUN mkdir -p ${JENKINS_HOME}/.pebble-sdk/ && \
     touch ${JENKINS_HOME}/.pebble-sdk/NO_TRACKING
 
 # set PATH
-ENV PATH /opt/pebble-dev/${PEBBLE_TOOL_VERSION}/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+ENV PATH /opt/pebble-dev/${PEBBLE_SDK_VERSION}/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 
 COPY jenkins.sh /usr/local/bin/jenkins.sh
 ENTRYPOINT ["/bin/tini", "--", "/usr/local/bin/jenkins.sh"]
