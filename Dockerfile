@@ -7,6 +7,10 @@ RUN apt-get update &&\
 ENV JENKINS_HOME /var/jenkins_home
 ENV PEBBLE_SDK_VERSION pebble-sdk-4.0.1-linux64
 
+# Jenkins home directoy is a volume, so configuration and build history
+# can be persisted and survive image upgrades
+VOLUME /var/jenkins_home
+
 # get pebble tool
 RUN mkdir -p ${JENKINS_HOME}/pebble-dev
 RUN curl -sSL https://s3.amazonaws.com/assets.getpebble.com/pebble-tool/${PEBBLE_SDK_VERSION}.tar.bz2 \
@@ -32,10 +36,6 @@ RUN chmod +w /etc/sudoers &&\
 RUN mkdir -p /home/jenkins/.pebble-sdk/ && \
     chown -R jenkins:users /home/jenkins/.pebble-sdk && \
     touch /home/jenkins/.pebble-sdk/ACCEPT_LICENSE
-
-# Jenkins home directoy is a volume, so configuration and build history
-# can be persisted and survive image upgrades
-VOLUME /var/jenkins_home
 
 # `/usr/share/jenkins/ref/` contains all reference configuration we want
 # to set on a fresh new installation. Use it to bundle additional plugins
