@@ -39,6 +39,10 @@ VOLUME /var/jenkins_home
 # to set on a fresh new installation. Use it to bundle additional plugins
 # or config file with your custom jenkins Docker image.
 RUN mkdir -p /usr/share/jenkins/ref/init.groovy.d
+# disable pebble analytics in the ref
+RUN mkdir -p /usr/share/jenkins/ref/.pebble-sdk/ && \
+    touch /usr/share/jenkins/ref/.pebble-sdk/ACCEPT_LICENSE &&\
+    touch /usr/share/jenkins/ref/.pebble-sdk/NO_TRACKING
 
 # Use tini as subreaper in Docker container to adopt zombie processes
 RUN curl -fL https://github.com/krallin/tini/releases/download/v0.5.0/tini-static -o /bin/tini && chmod +x /bin/tini
@@ -65,11 +69,6 @@ EXPOSE 50000
 ENV COPY_REFERENCE_FILE_LOG $JENKINS_HOME/copy_reference_file.log
 
 USER jenkins
-
-# disable pebble analytics
-RUN mkdir -p ${JENKINS_HOME}/.pebble-sdk/ && \
-    touch ${JENKINS_HOME}/.pebble-sdk/ACCEPT_LICENSE &&\
-    touch ${JENKINS_HOME}/.pebble-sdk/NO_TRACKING
 
 # set PATH
 ENV PATH /opt/pebble-dev/${PEBBLE_SDK_VERSION}/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
