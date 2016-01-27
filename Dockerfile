@@ -1,9 +1,6 @@
-FROM ubuntu:14.04
+FROM ubuntu:wily
 
 RUN apt-get update &&\ 
-    apt-get install -y software-properties-common &&\
-    add-apt-repository ppa:openjdk-r/ppa &&\
-    apt-get update &&\ 
     apt-get install -y openjdk-8-jdk wget git curl sudo zip python2.7-dev python-pip libfreetype6-dev bash-completion libsdl1.2debian libfdt1 libpixman-1-0 libglib2.0-dev &&\ 
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
