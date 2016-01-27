@@ -29,8 +29,7 @@ RUN useradd -d "$JENKINS_HOME" -u 1000 -m -s /bin/bash jenkins
 RUN chmod +w /etc/sudoers &&\ 
     echo "jenkins   ALL=(ALL)       NOPASSWD:ALL" >> /etc/sudoers &&\ 
     chmod -w /etc/sudoers
-RUN chmod -R 777 /${JENKINS_HOME}/pebble-dev/${PEBBLE_TOOL_VERSION} && \
-    mkdir -p /home/jenkins/.pebble-sdk/ && \
+RUN mkdir -p /home/jenkins/.pebble-sdk/ && \
     chown -R jenkins:users /home/jenkins/.pebble-sdk && \
     touch /home/jenkins/.pebble-sdk/ACCEPT_LICENSE
 
