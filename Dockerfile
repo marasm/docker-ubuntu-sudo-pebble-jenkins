@@ -28,11 +28,8 @@ RUN /bin/bash -c " \
 RUN useradd -d "$JENKINS_HOME" -u 1000 -m -s /bin/bash jenkins
 RUN chmod +w /etc/sudoers &&\ 
     echo "jenkins   ALL=(ALL)       NOPASSWD:ALL" >> /etc/sudoers &&\ 
-    chmod -w /etc/sudoers
-RUN chmod -R 777 /opt/pebble-dev/ &&\
-    mkdir -p /home/jenkins/.pebble-sdk/ && \
-    chown -R jenkins:users /home/jenkins/.pebble-sdk && \
-    touch /home/jenkins/.pebble-sdk/ACCEPT_LICENSE
+    chmod -w /etc/sudoers &&\
+    chmod -R 777 /opt/pebble-dev/ 
 
 # Jenkins home directoy is a volume, so configuration and build history
 # can be persisted and survive image upgrades
@@ -69,8 +66,13 @@ ENV COPY_REFERENCE_FILE_LOG $JENKINS_HOME/copy_reference_file.log
 
 USER jenkins
 
+# disable pebble analytics
+RUN mkdir -p ${JENKINS_HOME}/.pebble-sdk/ && \
+    touch ${JENKINS_HOME}/.pebble-sdk/ACCEPT_LICENSE &&\
+    touch ${JENKINS_HOME}/.pebble-sdk/NO_TRACKING
+
 # set PATH
-ENV PATH /${JENKINS_HOME}/pebble-dev/${PEBBLE_TOOL_VERSION}/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+ENV PATH /opt/pebble-dev/${PEBBLE_TOOL_VERSION}/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 
 COPY jenkins.sh /usr/local/bin/jenkins.sh
 ENTRYPOINT ["/bin/tini", "--", "/usr/local/bin/jenkins.sh"]
