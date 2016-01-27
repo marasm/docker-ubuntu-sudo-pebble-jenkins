@@ -38,6 +38,7 @@ RUN mkdir -p ${JENKINS_HOME}/.pebble-sdk/ && \
 
 # Jenkins home directoy is a volume, so configuration and build history
 # can be persisted and survive image upgrades
+# DO NOT write anything to this folder after this point as it will be ignored
 VOLUME /var/jenkins_home
 
 # `/usr/share/jenkins/ref/` contains all reference configuration we want
