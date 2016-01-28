@@ -31,21 +31,18 @@ RUN chmod +w /etc/sudoers &&\
     chmod -w /etc/sudoers &&\
     chmod -R 777 /opt/pebble-dev/ 
 
-# disable pebble analytics in the ref
-RUN mkdir -p ${JENKINS_HOME}/.pebble-sdk/ && \
-    touch ${JENKINS_HOME}/.pebble-sdk/ACCEPT_LICENSE &&\
-    touch ${JENKINS_HOME}/.pebble-sdk/NO_TRACKING
-
 # Jenkins home directoy is a volume, so configuration and build history
 # can be persisted and survive image upgrades
-# DO NOT write anything to this folder after this point as it will be ignored
 VOLUME /var/jenkins_home
 
 # `/usr/share/jenkins/ref/` contains all reference configuration we want
 # to set on a fresh new installation. Use it to bundle additional plugins
 # or config file with your custom jenkins Docker image.
 RUN mkdir -p /usr/share/jenkins/ref/init.groovy.d
-
+# disable pebble analytics in the ref
+RUN mkdir -p /usr/share/jenkins/ref/.pebble-sdk/ && \
+    touch /usr/share/jenkins/ref/.pebble-sdk/ACCEPT_LICENSE &&\
+    touch /usr/share/jenkins/ref/.pebble-sdk/NO_TRACKING
 
 # Use tini as subreaper in Docker container to adopt zombie processes
 RUN curl -fL https://github.com/krallin/tini/releases/download/v0.5.0/tini-static -o /bin/tini && chmod +x /bin/tini
