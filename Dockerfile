@@ -5,6 +5,10 @@ RUN apt-get update &&\
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 ENV JENKINS_HOME /var/jenkins_home
+ENV JENKINS_VERSION 1.623
+ENV JENKINS_SHA db873da98bddcea47e815442e28f1164442efd5a
+ENV JENKINS_UC https://updates.jenkins-ci.org
+
 ENV PEBBLE_SDK_VERSION pebble-sdk-4.0.1-linux64
 
 # get pebble tool
@@ -44,20 +48,21 @@ RUN mkdir -p /usr/share/jenkins/ref/.pebble-sdk/ && \
     touch /usr/share/jenkins/ref/.pebble-sdk/ACCEPT_LICENSE &&\
     touch /usr/share/jenkins/ref/.pebble-sdk/NO_TRACKING
 
+# install the plugins listed in the plugins txt
+COPY plugins.sh /usr/local/bin/plugins.sh
+COPY plugins.txt /plugins.txt
+RUN plugins.sh /plugins.txt
+
 # Use tini as subreaper in Docker container to adopt zombie processes
 RUN curl -fL https://github.com/krallin/tini/releases/download/v0.5.0/tini-static -o /bin/tini && chmod +x /bin/tini
 
 COPY init.groovy /usr/share/jenkins/ref/init.groovy.d/tcp-slave-agent-port.groovy
-
-ENV JENKINS_VERSION 1.623
-ENV JENKINS_SHA db873da98bddcea47e815442e28f1164442efd5a
 
 # could use ADD but this one does not check Last-Modified header
 # see https://github.com/docker/docker/issues/8331
 RUN curl -fL http://mirrors.jenkins-ci.org/war/$JENKINS_VERSION/jenkins.war -o /usr/share/jenkins/jenkins.war \
   && echo "$JENKINS_SHA /usr/share/jenkins/jenkins.war" | sha1sum -c -
 
-ENV JENKINS_UC https://updates.jenkins-ci.org
 RUN chown -R jenkins "$JENKINS_HOME" /usr/share/jenkins/ref
 
 # for main web interface:
@@ -76,5 +81,3 @@ ENV PATH /opt/pebble-dev/${PEBBLE_SDK_VERSION}/bin:/usr/local/sbin:/usr/local/bi
 COPY jenkins.sh /usr/local/bin/jenkins.sh
 ENTRYPOINT ["/bin/tini", "--", "/usr/local/bin/jenkins.sh"]
 
-# from a derived Dockerfile, can use `RUN plugin.sh active.txt` to setup /usr/share/jenkins/ref/plugins from a support bundle
-COPY plugins.sh /usr/local/bin/plugins.sh
