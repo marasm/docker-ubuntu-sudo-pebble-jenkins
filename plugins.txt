@@ -1,5 +1,15 @@
+scm-api
 git
 git-server
 git-client
 github
+github-api
+github-branch-source
+github-oauth
+github-pullrequest
+github-sqs-plugin
+plain-credentials
+pipeline-utility-steps
+ssh-agent
+token-macro
 ws-cleanup
