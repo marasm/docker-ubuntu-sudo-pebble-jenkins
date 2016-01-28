@@ -44,6 +44,11 @@ RUN mkdir -p /usr/share/jenkins/ref/.pebble-sdk/ && \
     touch /usr/share/jenkins/ref/.pebble-sdk/ACCEPT_LICENSE &&\
     touch /usr/share/jenkins/ref/.pebble-sdk/NO_TRACKING
 
+# install the plugins listed in the plugins txt
+COPY plugins.sh /usr/local/bin/plugins.sh
+COPY plugins.txt /plugins.txt
+RUN plugins.sh /plugins.txt
+
 # Use tini as subreaper in Docker container to adopt zombie processes
 RUN curl -fL https://github.com/krallin/tini/releases/download/v0.5.0/tini-static -o /bin/tini && chmod +x /bin/tini
 
@@ -76,5 +81,3 @@ ENV PATH /opt/pebble-dev/${PEBBLE_SDK_VERSION}/bin:/usr/local/sbin:/usr/local/bi
 COPY jenkins.sh /usr/local/bin/jenkins.sh
 ENTRYPOINT ["/bin/tini", "--", "/usr/local/bin/jenkins.sh"]
 
-# from a derived Dockerfile, can use `RUN plugin.sh active.txt` to setup /usr/share/jenkins/ref/plugins from a support bundle
-COPY plugins.sh /usr/local/bin/plugins.sh
