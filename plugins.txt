@@ -6,8 +6,8 @@ github
 github-api
 github-branch-source
 github-oauth
-github-pullrequest
 github-sqs-plugin
+ghprb
 plain-credentials
 pipeline-utility-steps
 ssh-agent
