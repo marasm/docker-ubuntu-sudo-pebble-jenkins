@@ -9,7 +9,7 @@ ENV JENKINS_VERSION 1.623
 ENV JENKINS_SHA db873da98bddcea47e815442e28f1164442efd5a
 ENV JENKINS_UC https://updates.jenkins-ci.org
 
-ENV PEBBLE_SDK_VERSION pebble-sdk-4.0.1-linux64
+ENV PEBBLE_SDK_VERSION pebble-sdk-4.1.1-linux64
 
 # get pebble tool
 RUN mkdir -p /opt/pebble-dev
